@@ -1,0 +1,28 @@
+---
+- hosts:
+    - ubuntu_server
+    - nfx250-S2-JDM3
+  roles:
+    - role: '{{playbook_dir}}'
+  connection: local
+  gather_facts: no
+  #vars_files:
+    #- "{{playbook_dir}}/host_vars/ubuntu_server/generic-vm-vars.yml"
+
+  tasks:
+  - name: create configuration directory
+    file:
+      path: "{{playbook_dir}}/render"
+      state: directory
+
+  - name: copy template of VNF with multiple interfaces
+    template:
+      src:    "{{playbook_dir}}/variable_dynamic_prepare_jdm_set_config_with_jinja.j2"
+      dest:   "{{playbook_dir}}/render/{{ vm_name }}_create.conf"
+      force:  yes
+      backup: no
+
+  - name: display multiple file contents
+    debug: var=item
+    with_file:
+      - "{{playbook_dir}}/render/{{ vm_name }}_create.conf"
