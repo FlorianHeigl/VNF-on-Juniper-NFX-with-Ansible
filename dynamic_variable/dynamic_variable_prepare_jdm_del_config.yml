@@ -4,28 +4,27 @@
   connection: local
   gather_facts: no
   vars:
-    target_tmp: "{{ playbook_dir }}/render"
     target_dir: "/var/third-party/iso/"
 
   tasks:
   - name: create configuration directory
     file:
-      path: "{{target_tmp}}"
+      path: "{{target_dir}}"
       state: directory
 
   - name: delete file
     file:
-      path: "{{ target_tmp }}/{{ vm_name }}_delete.conf"
+      path: "{{ target_dir }}/{{ vm_name }}_delete.conf"
       state: absent
 
   - template:
       src: "{{ playbook_dir }}/generic_vm_config_delete_on_nfx.conf"
-      dest: "{{ target_tmp }}/{{ vm_name }}_delete.conf"
+      dest: "{{ target_dir }}/{{ vm_name }}_delete.conf"
       force: yes
       backup: no
 
   - replace:
-      path:  "{{ target_tmp }}/{{ vm_name }}_delete.conf"
+      path:  "{{ target_dir }}/{{ vm_name }}_delete.conf"
       regexp: 'virtual-network-functions generic;'
       replace: 'virtual-network-functions {{ vm_name }};'
       backup: no
