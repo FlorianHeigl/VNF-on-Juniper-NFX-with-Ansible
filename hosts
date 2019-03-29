@@ -1,5 +1,4 @@
 [junos_all:children]
-VSRX_ALL
 NFX_JCP_ALL
 
 [NFX_JCP_ALL]
